@@ -2,6 +2,7 @@
 using Microservice.Framework.Domain.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ShoppingBasketService.Domain.Application;
 using ShoppingBasketService.Domain.Extensions;
 using ShoppingBasketService.Domain.ExternalServices;
 using System;
@@ -24,6 +25,15 @@ namespace ShoppingBasketService.Domain
                 {
                     httpclient.BaseAddress = new Uri(
                         configuration["ExternalServices:DiscountServiceApi"]);
+                })
+                .AddExternalService<IEventCatalogService, EventCatalogService>(httpclient =>
+                {
+                    httpclient.BaseAddress = new Uri(
+                        configuration["ExternalServices:EventCatalogServiceApi"]);
+                })
+                .RegisterServices(sc => 
+                {
+                    sc.AddTransient<IShoppingBasketService, Application.ShoppingBasketService>();
                 });
         }
     }

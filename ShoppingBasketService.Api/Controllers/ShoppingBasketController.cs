@@ -8,6 +8,7 @@ using ShoppingBasketService.Domain.Application.Model;
 using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel;
 using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.BusMessages;
 using ShoppingBasketService.Domain.Extensions;
+using ShoppingBasketService.Domain.ExternalServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace ShoppingBasketService.Api.Controllers
         private readonly IShoppingBasketService _shoppingBasketService;
 
         public ShoppingBasketController(
-            IMapper mapper, 
+            IMapper mapper,
             IShoppingBasketService shoppingBasketService)
         {
             _mapper = mapper;
