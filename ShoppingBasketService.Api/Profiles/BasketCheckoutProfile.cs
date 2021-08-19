@@ -10,7 +10,7 @@ namespace ShoppingBasketService.Api.Profiles
         public BasketCheckoutProfile()
         {
             CreateMap<BasketCheckoutApplicationModel, BasketCheckoutMessage>().ReverseMap();
-            CreateMap<BasketCheckoutApplicationModel, BasketCheckoutApplicationModel>().ReverseMap();
+            CreateMap<BasketCheckoutApplicationModel, BasketCheckoutRequestModel>().ReverseMap();
         }
     }
 }

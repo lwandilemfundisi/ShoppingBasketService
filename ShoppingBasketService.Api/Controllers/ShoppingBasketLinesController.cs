@@ -33,7 +33,7 @@ namespace ShoppingBasketService.Api.Controllers
         }
 
         [HttpGet("getBasketLines/{basketId}")]
-        public async Task<IActionResult> GetBasketLines([FromQuery]string basketId)
+        public async Task<IActionResult> GetBasketLines(string basketId)
         {
             var basket = await _shoppingBasketService
                 .GetBasket(new BasketId(basketId), null, CancellationToken.None);
@@ -47,9 +47,9 @@ namespace ShoppingBasketService.Api.Controllers
         }
 
         [HttpGet("getBasketLine/{basketId}/{basketLineId}")]
-        public async Task<IActionResult> Get(
-            [FromQuery]string basketId,
-            [FromQuery]string basketLineId)
+        public async Task<IActionResult> GetBasketLine(
+            string basketId,
+            string basketLineId)
         {
             var basket = await _shoppingBasketService
                 .GetBasket(new BasketId(basketId), null, CancellationToken.None);
