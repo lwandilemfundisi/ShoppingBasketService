@@ -32,18 +32,20 @@ namespace ShoppingBasketService.Api.Controllers
             _shoppingBasketService = shoppingBasketService;
         }
 
-        [HttpGet("getBasketLines/{basketId}")]
-        public async Task<IActionResult> GetBasketLines(string basketId)
+        [HttpGet("getBasketLines")]
+        public async Task<IActionResult> GetBasketLines([FromQuery] GetBasketLinesRequestModel model)
         {
-            var basket = await _shoppingBasketService
-                .GetBasket(new BasketId(basketId), null, CancellationToken.None);
-
-            if (basket.IsNull())
+            if(ModelState.IsValid)
             {
-                return NotFound();
-            }
+                var basketLines = await _shoppingBasketService
+                    .GetBasketLines(new BasketId(model.BasketId), null, CancellationToken.None);
 
-            return Ok(_mapper.Map<IEnumerable<BasketLineDtoModel>>(basket.BasketLines));
+                return Ok(basketLines.BasketLines);
+            }
+            else
+            {
+                return BadRequest(ModelState.Values);
+            }
         }
 
         [HttpGet("getBasketLine/{basketId}/{basketLineId}")]
@@ -76,7 +78,7 @@ namespace ShoppingBasketService.Api.Controllers
             if(ModelState.IsValid)
             {
                 var basket = await _shoppingBasketService
-                    .GetBasket(model.BasketId, null, CancellationToken.None);
+                    .GetBasket(new BasketId(model.BasketId), null, CancellationToken.None);
 
                 if (basket.IsNull())
                 {
@@ -84,17 +86,12 @@ namespace ShoppingBasketService.Api.Controllers
                 }
 
                 var addBasketLineResult = await _shoppingBasketService
-                    .AddBasketLine(model.BasketId, _mapper.Map<AddBasketLineApplicationModel>(model), CancellationToken.None);
+                    .AddBasketLine(new BasketId(model.BasketId), _mapper.Map<AddBasketLineApplicationModel>(model), CancellationToken.None);
 
                 if (!addBasketLineResult.IsSuccess)
                     return BadRequest(addBasketLineResult);
 
-                var basketLineDto = _mapper.Map<BasketLineDtoModel>(addBasketLineResult.As<BasketLine>());
-
-                return CreatedAtRoute(
-                    "getBasketLine",
-                    new { basketId = basketLineDto.BasketId.Value, basketLineId = basketLineDto.BasketLineId.Value },
-                    basketLineDto);
+                return Ok();
             }
             else
             {
@@ -121,12 +118,7 @@ namespace ShoppingBasketService.Api.Controllers
                 if (!updateBasketLineResult.IsSuccess)
                     return BadRequest(updateBasketLineResult);
 
-                var basketLineDto = _mapper.Map<BasketLineDtoModel>(updateBasketLineResult.As<BasketLine>());
-
-                return CreatedAtRoute(
-                    "getBasketLine",
-                    new { basketId = basketLineDto.BasketId.Value, basketLineId = basketLineDto.BasketLineId.Value },
-                    basketLineDto);
+                return Ok();
             }
             else
             {

@@ -12,4 +12,9 @@ namespace ShoppingBasketService.Domain.ExternalServices.Models.ExternalDtoModels
         public string EventName { get; set; }
         public DateTime Date { get; set; }
     }
+
+    public class EventExternalDtosModel
+    {
+        public IList<EventExternalDtoModel> Events { get; set; }
+    }
 }

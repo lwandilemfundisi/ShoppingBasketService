@@ -13,7 +13,7 @@ namespace ShoppingBasketService.Api.Profiles
     {
         public BasketLineProfile()
         {
-            CreateMap<AddBasketLineApplicationModel, AddBasketLineRequestModel>();
+            CreateMap<AddBasketLineApplicationModel, AddBasketLineRequestModel>().ReverseMap();
             CreateMap<UpdateBasketLineApplicationModel, UpdateBasketLineRequestModel>();
             CreateMap<DeleteBasketLineApplicationModel, DeleteBasketLineRequestModel>();
             CreateMap<BasketLineDtoModel, BasketLine>().ReverseMap();

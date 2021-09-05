@@ -9,7 +9,7 @@ using ShoppingBasketService.Persistence;
 namespace ShoppingBasketService.Persistence.Migrations
 {
     [DbContext(typeof(ShoppingBasketContext))]
-    [Migration("20210818214128_init")]
+    [Migration("20210819221026_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -46,28 +46,27 @@ namespace ShoppingBasketService.Api.Controllers
         [HttpPost("createBasket")]
         public async Task<IActionResult> CreateBasket(CreateBasketRequestModel model)
         {
-            var basketToReturn = await _shoppingBasketService
+            var basket = await _shoppingBasketService
                 .CreateBasket(model.UserId, CancellationToken.None);
 
-            return CreatedAtRoute(
-                "getBasket",
-                new { basketId = basketToReturn.Id },
-                basketToReturn);
+            var result = _mapper.Map<BasketDtoModel>(basket);
+            result.NumberOfItems = basket.BasketLines?.Sum(bl => bl.TicketAmount);
+            return Ok(result);
         }
 
-        [HttpGet("getBasket/{basketId}")]
-        public async Task<ActionResult<Basket>> GetBasket(GetBasketRequestModel model)
+        [HttpGet("getBasket")]
+        public async Task<ActionResult<Basket>> GetBasket([FromQuery] GetBasketRequestModel model)
         {
-            var basket = await _shoppingBasketService
-                .GetBasket(model.BasketId, model.UserId, CancellationToken.None);
+            var basket = model.BasketId.IsNullOrEmpty() ? null : await _shoppingBasketService
+                .GetBasket(new BasketId(model.BasketId), null, CancellationToken.None);
 
             if (basket == null)
             {
-                return NotFound();
+                return Ok(null);
             }
 
             var result = _mapper.Map<BasketDtoModel>(basket);
-            result.NumberOfItems = basket.BasketLines.Sum(bl => bl.TicketAmount);
+            result.NumberOfItems = basket.BasketLines?.Sum(bl => bl.TicketAmount);
             return Ok(result);
         }
     }

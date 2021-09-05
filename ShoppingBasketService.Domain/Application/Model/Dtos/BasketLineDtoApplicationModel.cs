@@ -3,16 +3,12 @@ using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Entitie
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace ShoppingBasketService.Api.Models
+namespace ShoppingBasketService.Domain.Application.Model.Dtos
 {
-    public class BasketLinesDtoModel
-    {
-        public IList<BasketLineDtoModel> BasketLines { get; set; }
-    }
-
-    public class BasketLineDtoModel
+    public class BasketLineDtoApplicationModel
     {
         public BasketLineId Id { get; set; }
         public BasketId BasketId { get; set; }
@@ -21,5 +17,16 @@ namespace ShoppingBasketService.Api.Models
         public decimal TicketPrice { get; set; }
         public int Quantity { get; set; }
         public int Total { get; set; }
+        public string EventId { get; set; }
+    }
+
+    public class BasketLinseDtoApplicationModel
+    {
+        public BasketLinseDtoApplicationModel()
+        {
+            BasketLines = new List<BasketLineDtoApplicationModel>();
+        }
+
+        public IList<BasketLineDtoApplicationModel> BasketLines { get; set; }
     }
 }

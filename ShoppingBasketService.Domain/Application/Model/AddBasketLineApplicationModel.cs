@@ -9,7 +9,7 @@ namespace ShoppingBasketService.Domain.Application.Model
 {
     public class AddBasketLineApplicationModel
     {
-        public BasketId BasketId { get; set; }
+        public string BasketId { get; set; }
 
         public string EventId { get; set; }
 

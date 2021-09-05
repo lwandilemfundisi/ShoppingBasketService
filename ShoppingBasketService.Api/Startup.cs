@@ -30,6 +30,20 @@ namespace ShoppingBasketService.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: "enableCors",
+                    builder =>
+                    {
+                        builder
+                        .WithOrigins("http://localhost:8080")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                    });
+            });
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddLogging(l => l.AddConsole());
             services.AddSwaggerGen(c =>
@@ -60,6 +74,8 @@ namespace ShoppingBasketService.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("enableCors");
 
             app.UseAuthorization();
 

@@ -11,5 +11,7 @@ namespace ShoppingBasketService.Domain.ExternalServices
     public interface IEventCatalogService
     {
         Task<EventExternalDtoModel> GetEvent(string id, CancellationToken cancellationToken);
+
+        Task<EventExternalDtosModel> GetEvents(IEnumerable<string> ids, CancellationToken cancellationToken);
     }
 }

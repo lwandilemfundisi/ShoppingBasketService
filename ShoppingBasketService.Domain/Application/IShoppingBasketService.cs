@@ -1,5 +1,6 @@
 ﻿using Microservice.Framework.Domain.ExecutionResults;
 using ShoppingBasketService.Domain.Application.Model;
+using ShoppingBasketService.Domain.Application.Model.Dtos;
 using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel;
 using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.BusMessages;
 using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Entities;
@@ -25,6 +26,12 @@ namespace ShoppingBasketService.Domain.Application
             BasketId basketId, 
             string userId, 
             CancellationToken none);
+
+        Task<BasketLinseDtoApplicationModel> GetBasketLines(
+            BasketId basketId,
+            string userId,
+            CancellationToken none);
+
         Task<IExecutionResult> AddBasketLine(
             BasketId basketId,
             AddBasketLineApplicationModel addBasketLineApplicationModel, 

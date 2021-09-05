@@ -8,8 +8,6 @@ namespace ShoppingBasketService.Api.Models
 {
     public class GetBasketRequestModel
     {
-        public BasketId BasketId { get; set; }
-
-        public string UserId { get; set; }
+        public string BasketId { get; set; }
     }
 }

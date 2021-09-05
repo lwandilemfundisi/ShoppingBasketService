@@ -1,7 +1,9 @@
 ﻿using Microservice.Framework.Domain.Commands;
 using Microservice.Framework.Domain.ExecutionResults;
 using Microservice.Framework.Domain.Queries;
+using ShoppingBasketService.Domain.Application.Mappers;
 using ShoppingBasketService.Domain.Application.Model;
+using ShoppingBasketService.Domain.Application.Model.Dtos;
 using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel;
 using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Commands;
 using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Entities;
@@ -9,6 +11,7 @@ using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Queries
 using ShoppingBasketService.Domain.Extensions;
 using ShoppingBasketService.Domain.ExternalServices;
 using ShoppingBasketService.Domain.ExternalServices.Models.ExternalRequestModels;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,15 +22,18 @@ namespace ShoppingBasketService.Domain.Application
         private readonly ICommandBus _commandBus;
         private readonly IQueryProcessor _queryPropcessor;
         private readonly IDiscountService _discountService;
+        private readonly IEventCatalogService _eventCatalogService;
 
         public ShoppingBasketService(
             ICommandBus commandBus,
             IQueryProcessor queryPropcessor,
-            IDiscountService discountService)
+            IDiscountService discountService,
+            IEventCatalogService eventCatalogService)
         {
             _commandBus = commandBus;
             _queryPropcessor = queryPropcessor;
             _discountService = discountService;
+            _eventCatalogService = eventCatalogService;
         }
 
         public async Task<IExecutionResult> AddBasketLine(
@@ -111,6 +117,20 @@ namespace ShoppingBasketService.Domain.Application
                 new DeleteBasketLineCommand(
                     basketId,
                     deleteBasketLineApplicationModel), cancellationToken);
+        }
+
+        public async Task<BasketLinseDtoApplicationModel> GetBasketLines(
+            BasketId basketId, 
+            string userId, 
+            CancellationToken cancellationToken)
+        {
+            var basket = await GetBasket(basketId, userId, cancellationToken);
+
+            var linesEventIds = basket.BasketLines.Select(bl => bl.EventId);
+
+            var result = await _eventCatalogService.GetEvents(linesEventIds, cancellationToken);
+
+            return new BasketLinseDtoApplicationModelMapper(result, basket.BasketLines).Map();
         }
     }
 }

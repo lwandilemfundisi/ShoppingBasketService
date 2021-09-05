@@ -1,16 +1,15 @@
 ﻿using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ShoppingBasketService.Api.Models
 {
-    public class BasketDtoModel
+    public class GetBasketLinesRequestModel
     {
-        public BasketId Id { get; set; }
-        public string UserId { get; set; }
-        public int? NumberOfItems { get; set; }
-        public string CouponId { get; set; }
+        [Required]
+        public string BasketId { get; set; }
     }
 }

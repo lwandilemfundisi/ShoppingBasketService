@@ -8,7 +8,7 @@ namespace ShoppingBasketService.Api.Models
 {
     public class AddBasketLineRequestModel
     {
-        public BasketId BasketId { get; set; }
+        public string BasketId { get; set; }
 
         public string EventId { get; set; }
 
