@@ -1,4 +1,5 @@
-﻿using Microservice.Framework.Domain.Commands;
+﻿using Microservice.Framework.Common;
+using Microservice.Framework.Domain.Commands;
 using Microservice.Framework.Domain.ExecutionResults;
 using Microservice.Framework.Domain.Queries;
 using ShoppingBasketService.Domain.Application.Mappers;
@@ -126,11 +127,16 @@ namespace ShoppingBasketService.Domain.Application
         {
             var basket = await GetBasket(basketId, userId, cancellationToken);
 
-            var linesEventIds = basket.BasketLines.Select(bl => bl.EventId);
+            if(basket.IsNotNull() && basket.BasketLines.HasItems())
+            {
+                var linesEventIds = basket.BasketLines.Select(bl => bl.EventId);
 
-            var result = await _eventCatalogService.GetEvents(linesEventIds, cancellationToken);
+                var events = await _eventCatalogService.GetEvents(linesEventIds, cancellationToken);
 
-            return new BasketLinseDtoApplicationModelMapper(result, basket.BasketLines).Map();
+                return new BasketLinseDtoApplicationModelMapper(events, basket.BasketLines).Map();
+            }
+
+            return new BasketLinseDtoApplicationModel();
         }
     }
 }
