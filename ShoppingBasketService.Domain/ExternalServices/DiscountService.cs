@@ -24,9 +24,8 @@ namespace ShoppingBasketService.Domain.ExternalServices
             GetCouponExternalRequestModel model, 
             CancellationToken cancellationToken)
         {
-            var response = await _httpClient.PostAsync(
-                $"/discount/getCoupon",
-                model.SerializeToJson(),
+            var response = await _httpClient.GetAsync(
+                $"/discount/getCoupon?couponId={model.CouponId}&userId={model.UserId}",
                 cancellationToken);
 
             return await response.As<CouponExternalDtoModel>();

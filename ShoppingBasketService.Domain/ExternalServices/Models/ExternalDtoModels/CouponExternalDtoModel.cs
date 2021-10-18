@@ -10,7 +10,7 @@ namespace ShoppingBasketService.Domain.ExternalServices.Models.ExternalDtoModels
     {
         public string CouponId { get; set; }
         public string Code { get; set; }
-        public int Amount { get; set; }
+        public decimal DiscountAmount { get; set; }
         public bool AlreadyUsed { get; set; }
     }
 }

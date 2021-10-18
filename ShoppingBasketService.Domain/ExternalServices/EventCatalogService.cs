@@ -35,9 +35,8 @@ namespace ShoppingBasketService.Domain.ExternalServices
             IEnumerable<string> ids, 
             CancellationToken cancellationToken)
         {
-            var debug = $"/Event/getEvents?{CollectionToQueryParam("ids", ids.ToArray())}";
             var response = await _httpClient.GetAsync(
-                debug,
+                $"/Event/getEvents?{CollectionToQueryParam("ids", ids.ToArray())}",
                 cancellationToken);
 
             return await response.As<EventExternalDtosModel>();

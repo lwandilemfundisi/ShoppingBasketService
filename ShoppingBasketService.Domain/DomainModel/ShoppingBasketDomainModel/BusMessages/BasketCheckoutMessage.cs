@@ -35,7 +35,7 @@ namespace ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Bus
 
         //order info
         public List<BasketLineMessage> BasketLines { get; set; }
-        public int BasketTotal { get; set; }
+        public decimal BasketTotal { get; set; }
     }
 
     public class BasketLineMessage

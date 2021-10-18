@@ -2,8 +2,10 @@
 using Microservice.Framework.Common;
 using Microservice.Framework.Domain.Commands;
 using Microservice.Framework.Domain.ExecutionResults;
+using Microservice.Framework.Domain.Queries;
 using ShoppingBasketService.Domain.Application.Model;
 using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.BusMessages;
+using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Queries;
 using ShoppingBasketService.Domain.ExternalServices.Models.ExternalDtoModels;
 using System;
 using System.Collections.Generic;
@@ -43,15 +45,19 @@ namespace ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Com
         : CommandHandler<Basket, BasketId, CheckoutBasketCommand>
     {
         private readonly IMapper _mapper;
+        private readonly IQueryProcessor _queryProcessor;
 
-        public CheckoutBasketCommandHandler(IMapper mapper)
+        public CheckoutBasketCommandHandler(
+            IMapper mapper,
+            IQueryProcessor queryProcessor)
         {
             _mapper = mapper;
+            _queryProcessor = queryProcessor;
         }
         
         #region Abstract Members
 
-        public override Task<IExecutionResult> ExecuteAsync(
+        public override async Task<IExecutionResult> ExecuteAsync(
             Basket aggregate, 
             CheckoutBasketCommand command, 
             CancellationToken cancellationToken)
@@ -61,7 +67,12 @@ namespace ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Com
 
             int total = 0;
 
-            foreach (var b in aggregate.BasketLines)
+            var basket = await _queryProcessor
+                .ProcessAsync(new GetBasketQuery(
+                    command.AggregateId, 
+                    command.BasketCheckoutApplicationModel.UserId), cancellationToken);
+
+            foreach (var b in basket.BasketLines)
             {
                 var basketLineMessage = new BasketLineMessage
                 {
@@ -77,7 +88,7 @@ namespace ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Com
 
             if(command.Coupon.IsNotNull())
             {
-                basketCheckoutMessage.BasketTotal = total - command.Coupon.Amount;
+                basketCheckoutMessage.BasketTotal = total - command.Coupon.DiscountAmount;
             }
             else
             {
@@ -86,7 +97,7 @@ namespace ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Com
 
             aggregate.CheckoutBasket(basketCheckoutMessage);
 
-            return Task.FromResult(ExecutionResult.Success(basketCheckoutMessage));
+            return ExecutionResult.Success(basketCheckoutMessage);
         }
 
         #endregion
