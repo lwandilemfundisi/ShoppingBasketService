@@ -1,5 +1,6 @@
 ﻿using Microservice.Framework.Persistence.EFCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using System;
 

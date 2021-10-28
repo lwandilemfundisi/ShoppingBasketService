@@ -31,7 +31,6 @@ namespace ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Que
         protected override void OnBuildDomainCriteria(EFCoreDomainCriteria domainCriteria)
         {
             domainCriteria.SafeAnd(new EqualityFilter("UserId", UserId, FilterType.Equal));
-            domainCriteria.Include = new Include("BasketLines");
         }
     }
 

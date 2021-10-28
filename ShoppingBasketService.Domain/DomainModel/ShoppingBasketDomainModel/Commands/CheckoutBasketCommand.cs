@@ -45,19 +45,16 @@ namespace ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Com
         : CommandHandler<Basket, BasketId, CheckoutBasketCommand>
     {
         private readonly IMapper _mapper;
-        private readonly IQueryProcessor _queryProcessor;
 
         public CheckoutBasketCommandHandler(
-            IMapper mapper,
-            IQueryProcessor queryProcessor)
+            IMapper mapper)
         {
             _mapper = mapper;
-            _queryProcessor = queryProcessor;
         }
         
         #region Abstract Members
 
-        public override async Task<IExecutionResult> ExecuteAsync(
+        public override Task<IExecutionResult> ExecuteAsync(
             Basket aggregate, 
             CheckoutBasketCommand command, 
             CancellationToken cancellationToken)
@@ -67,12 +64,7 @@ namespace ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Com
 
             int total = 0;
 
-            var basket = await _queryProcessor
-                .ProcessAsync(new GetBasketQuery(
-                    command.AggregateId, 
-                    command.BasketCheckoutApplicationModel.UserId), cancellationToken);
-
-            foreach (var b in basket.BasketLines)
+            foreach (var b in aggregate.BasketLines)
             {
                 var basketLineMessage = new BasketLineMessage
                 {
@@ -97,7 +89,7 @@ namespace ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Com
 
             aggregate.CheckoutBasket(basketCheckoutMessage);
 
-            return ExecutionResult.Success(basketCheckoutMessage);
+            return Task.FromResult(ExecutionResult.Success(basketCheckoutMessage));
         }
 
         #endregion

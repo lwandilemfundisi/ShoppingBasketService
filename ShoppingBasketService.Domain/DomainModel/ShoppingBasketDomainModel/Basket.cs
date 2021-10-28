@@ -3,6 +3,7 @@ using Microservice.Framework.Domain.Aggregates;
 using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.BusMessages;
 using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Entities;
 using ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Events;
+using ShoppingBasketService.Domain.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel
 {
     public class Basket : AggregateRoot<Basket, BasketId>
     {
+        private ICollection<BasketLine> _basketLines;
+
         #region Constructors
 
         public Basket()
@@ -27,13 +30,25 @@ namespace ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel
 
         }
 
+        private Basket(Action<object, string> lazyLoader)
+            : base(null)
+        {
+            LazyLoader = lazyLoader;
+        }
+
         #endregion
 
         #region Properties
 
         public string UserId { get; set; }
 
-        public ICollection<BasketLine> BasketLines { get; set; }
+        private Action<object, string> LazyLoader { get; set; }
+
+        public ICollection<BasketLine> BasketLines 
+        {
+            get => LazyLoader.Load(this, ref _basketLines);
+            set => _basketLines = value;
+        }
 
         #endregion
 
