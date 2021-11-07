@@ -43,7 +43,7 @@ namespace ShoppingBasketService.Api
                         .AllowCredentials();
                     });
             });
-
+            services.AddSingleton(_ => Configuration);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddLogging(l => l.AddConsole());
             services.AddSwaggerGen(c =>
@@ -58,7 +58,7 @@ namespace ShoppingBasketService.Api
                 .AddNewtonsoftJson();
             services
                 .ConfigureShoppingBasketServiceDomain(Configuration)
-                .ConfigureShoppingBasketPersistence(Configuration);
+                .ConfigureShoppingBasketPersistence();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

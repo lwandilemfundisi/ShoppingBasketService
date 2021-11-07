@@ -12,8 +12,7 @@ namespace ShoppingBasketService.Persistence.Extensions
     public static class EntityFrameworkExtensions
     {
         public static IDomainContainer ConfigureShoppingBasketPersistence(
-            this IDomainContainer domainContainer,
-            IConfiguration configuration)
+            this IDomainContainer domainContainer)
         {
             return domainContainer
                 .ConfigureEntityFramework(EntityFrameworkConfiguration.New)
@@ -21,7 +20,6 @@ namespace ShoppingBasketService.Persistence.Extensions
                 .RegisterServices(sr =>
                 {
                     sr.AddTransient<IPersistenceFactory, EntityFrameworkPersistenceFactory<ShoppingBasketContext>>();
-                    sr.AddSingleton(rctx => { return configuration; });
                 });
         }
         
