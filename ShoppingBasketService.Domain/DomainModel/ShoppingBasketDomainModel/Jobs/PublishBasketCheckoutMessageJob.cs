@@ -27,7 +27,7 @@ namespace ShoppingBasketService.Domain.DomainModel.ShoppingBasketDomainModel.Job
             CancellationToken cancellationToken)
         {
             var messageBus = serviceProvider.GetRequiredService<IMessageBus>();
-            await messageBus.PublishMessage(BasketCheckoutMessage, "checkoutmessage");
+            await messageBus.PublishMessage(BasketCheckoutMessage, "checkout");
         }
     }
 }
