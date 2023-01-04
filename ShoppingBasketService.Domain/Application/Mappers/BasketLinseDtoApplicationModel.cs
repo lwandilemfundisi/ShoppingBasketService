@@ -37,7 +37,7 @@ namespace ShoppingBasketService.Domain.Application.Mappers
                 {
                     EventId = ev.Id,
                     EventName = ev.EventName,
-                    Date = ev.Date,
+                    Date = ev.Date.ToUniversalTime().ToString("yyyy-MM-dd"),
                     Quantity = matchingBasketLine.TicketAmount,
                     TicketPrice = matchingBasketLine.Price,
                     Total = matchingBasketLine.TicketAmount * matchingBasketLine.Price

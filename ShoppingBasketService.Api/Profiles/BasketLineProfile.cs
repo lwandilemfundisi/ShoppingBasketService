@@ -16,7 +16,8 @@ namespace ShoppingBasketService.Api.Profiles
             CreateMap<AddBasketLineApplicationModel, AddBasketLineRequestModel>().ReverseMap();
             CreateMap<UpdateBasketLineApplicationModel, UpdateBasketLineRequestModel>();
             CreateMap<DeleteBasketLineApplicationModel, DeleteBasketLineRequestModel>();
-            CreateMap<BasketLineDtoModel, BasketLine>().ReverseMap();
+            CreateMap<BasketLine, BasketLineDtoModel>().ReverseMap();
+            CreateMap<DateTime, string>().ConvertUsing(dt => dt.ToUniversalTime().ToString("yyyy-MM-dd"));
 
         }
     }

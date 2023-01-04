@@ -17,7 +17,7 @@ namespace ShoppingBasketService.Api.Models
         public BasketLineId Id { get; set; }
         public BasketId BasketId { get; set; }
         public string EventName { get; set; }
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
         public decimal TicketPrice { get; set; }
         public int Quantity { get; set; }
         public int Total { get; set; }
